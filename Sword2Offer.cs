@@ -440,7 +440,7 @@ namespace Sword2Offer {
             ListNode root = head;
             ListNode current = head, previous = null;
 
-            while(current != null) {
+            while (current != null) {
                 if (current.val == val)
                     if (previous == null) return current.next;
                     else {
@@ -462,13 +462,14 @@ namespace Sword2Offer {
             bool[,] f = new bool[m + 1, n + 1];
             f[0, 0] = true;
             for (int i = 0; i <= m; i++) {
-                for (int j =1; j<=n; j++) {
-                    if(p[j-1] == '*') {
+                for (int j = 1; j <= n; j++) {
+                    if (p[j - 1] == '*') {
                         f[i, j] = f[i, j - 2];
-                        if (Matches(s, p, i, j -1)) {
+                        if (Matches(s, p, i, j - 1)) {
                             f[i, j] = f[i, j] || f[i - 1, j];
                         }
-                    } else {
+                    }
+                    else {
                         if (Matches(s, p, i, j)) {
                             f[i, j] = f[i - 1, j - 1];
                         }
@@ -501,7 +502,7 @@ namespace Sword2Offer {
         public bool IsNumber(string s) {
             int p = 0;
             char t;
-            foreach(char c in s) {
+            foreach (char c in s) {
                 if ('0' <= c && c <= '9') t = 'd';
                 else if (c == '+' || c == '-') t = 's';
                 else if (c == 'e' || c == 'E') t = 'e';
@@ -519,7 +520,7 @@ namespace Sword2Offer {
     public class Problem21 {
         public int[] Exchange(int[] nums) {
             int i = 0, j = nums.Length - 1;
-            while(i < j) {
+            while (i < j) {
                 while (i < j && nums[i] % 2 == 1) i++;
                 while (i < j && nums[j] % 2 == 0) j--;
 
@@ -541,8 +542,8 @@ namespace Sword2Offer {
             ListNode root = head, last = head;
             for (int i = 1; i < k; i++)
                 last = last.next;
-            
-            while(last.next != null) {
+
+            while (last.next != null) {
                 root = root.next;
                 last = last.next;
             }
@@ -567,7 +568,8 @@ namespace Sword2Offer {
                 if (newHead == null) {
                     newHead = temp;
                     newHead.next = null;
-                } else {
+                }
+                else {
                     temp.next = newHead;
                     newHead = temp;
                 }
@@ -601,12 +603,13 @@ namespace Sword2Offer {
             if (root2 == null) return l1;
 
             ListNode root = null, tail = null;
-            
-            while(root1 != null && root2 != null) {
+
+            while (root1 != null && root2 != null) {
                 if (root1.val <= root2.val) {
                     AddNode(ref root, ref tail, root1);
                     root1 = root1.next;
-                } else {
+                }
+                else {
                     AddNode(ref root, ref tail, root2);
                     root2 = root2.next;
                 }
@@ -740,9 +743,9 @@ namespace Sword2Offer {
         public bool ValidateStackSequences(int[] pushed, int[] popped) {
             Stack<int> stack = new Stack<int>();
             int index = 0;
-            foreach(int number in pushed) {
+            foreach (int number in pushed) {
                 stack.Push(number);
-                while(stack.Count != 0 && index < popped.Length && stack.Peek() == popped[index]) {
+                while (stack.Count != 0 && index < popped.Length && stack.Peek() == popped[index]) {
                     stack.Pop();
                     index++;
                 }
@@ -791,10 +794,10 @@ namespace Sword2Offer {
             Queue<TreeNode> queue = new Queue<TreeNode>();
 
             if (root != null) queue.Enqueue(root);
-            while(queue.Count != 0) {
+            while (queue.Count != 0) {
                 int currentLevelSize = queue.Count;
                 IList<int> currentLevelList = new List<int>();
-                for(int i = 0; i < currentLevelSize; i++) {
+                for (int i = 0; i < currentLevelSize; i++) {
                     TreeNode x = queue.Dequeue();
                     currentLevelList.Add(x.val);
 
@@ -913,13 +916,13 @@ namespace Sword2Offer {
             Dictionary<Node, Node> mapOfNode = new Dictionary<Node, Node>();
             Node pointer = head;
 
-            while(pointer != null) {
+            while (pointer != null) {
                 mapOfNode.Add(pointer, new Node(pointer.val));
                 pointer = pointer.next;
             }
 
             pointer = head;
-            while(pointer != null) {
+            while (pointer != null) {
                 mapOfNode[pointer].next = pointer.next != null ? mapOfNode[pointer.next] : null;
                 mapOfNode[pointer].random = pointer.random != null ? mapOfNode[pointer.random] : null;
                 pointer = pointer.next;
@@ -969,8 +972,69 @@ namespace Sword2Offer {
             else pre.right = node;
             node.left = pre;
             pre = node;
-            
+
             Search(node.right);
+        }
+    }
+
+    public class Problem37 {
+        public class TreeNode {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int x) { val = x; }
+        }
+
+        // Encodes a tree to a single string.
+        public string serialize(TreeNode root) {
+            if (root == null) return "[]";
+            StringBuilder result = new StringBuilder("[");
+
+            Queue<TreeNode> queue = new Queue<TreeNode>();
+            queue.Enqueue(root);
+
+            while (queue.Count != 0) {
+                TreeNode node = queue.Dequeue();
+                if (node != null) {
+                    result.Append(node.val + ",");
+                    queue.Enqueue(node.left);
+                    queue.Enqueue(node.right);
+                }
+                else {
+                    result.Append("null,");
+                }
+            }
+            result.Remove(result.Length - 1, 1);
+            result.Append("]");
+
+            return result.ToString();
+        }
+
+        // Decodes your encoded data to tree.
+        public TreeNode deserialize(string data) {
+            if (data == "[]") return null;
+
+            String[] vals = data.Substring(1, data.Length - 2).Split(",");
+            TreeNode root = new TreeNode(int.Parse(vals[0]));
+            Queue<TreeNode> queue = new Queue<TreeNode>();
+            queue.Enqueue(root);
+            int i = 1;
+
+            while (queue.Count != 0) {
+                TreeNode node = queue.Dequeue();
+                if (vals[i] != "null") {
+                    node.left = new TreeNode(int.Parse(vals[i]));
+                    queue.Enqueue(node.left);
+                }
+                i++;
+                if (vals[i] != "null") {
+                    node.right = new TreeNode(int.Parse(vals[i]));
+                    queue.Enqueue(node.right);
+                }
+                i++;
+            }
+
+            return root;
         }
     }
 
@@ -1007,10 +1071,11 @@ namespace Sword2Offer {
             int len = nums.Length / 2;
             Dictionary<int, int> dict = new Dictionary<int, int>();
 
-            foreach(int i in nums) {
+            foreach (int i in nums) {
                 if (dict.ContainsKey(i)) {
                     dict[i] += 1;
-                } else {
+                }
+                else {
                     dict.Add(i, 1);
                 }
                 if (dict[i] > len) return i;
@@ -1029,6 +1094,74 @@ namespace Sword2Offer {
         }
     }
 
+    public class Problem41 {
+        public class PriorityQueue<T> where T : IComparable<T> {
+            private SortedList<T, int> list = new SortedList<T, int>();
+            private int count = 0;
+
+            public void Add(T item) {
+                if (list.ContainsKey(item)) list[item]++;
+                else list.Add(item, 1);
+
+                count++;
+            }
+
+            public T PopFirst() {
+                if (Size() == 0) return default(T);
+                T result = list.Keys[0];
+                if (--list[result] == 0)
+                    list.RemoveAt(0);
+
+                count--;
+                return result;
+            }
+
+            public T PopLast() {
+                if (Size() == 0) return default(T);
+                int index = list.Count - 1;
+                T result = list.Keys[index];
+                if (--list[result] == 0)
+                    list.RemoveAt(index);
+
+                count--;
+                return result;
+            }
+
+            public int Size() {
+                return count;
+            }
+
+            public T PeekFirst() {
+                if (Size() == 0) return default(T);
+                return list.Keys[0];
+            }
+
+            public T PeekLast() {
+                if (Size() == 0) return default(T);
+                int index = list.Count - 1;
+                return list.Keys[index];
+            }
+        }
+
+        private PriorityQueue<int> A = new PriorityQueue<int>();
+        private PriorityQueue<int> B = new PriorityQueue<int>();
+
+        public void AddNum(int num) {
+            if (A.Size() != B.Size()) {
+                A.Add(num);
+                B.Add(A.PopFirst());
+            }
+            else {
+                B.Add(num);
+                A.Add(B.PopLast());
+            }
+        }
+
+        public double FindMedian() {
+            return A.Size() != B.Size() ? A.PeekFirst() : (A.PeekFirst() + B.PeekLast()) / 2.0;
+        }
+    }
+
     public class Problem42 {
         public int MaxSubArray(int[] nums) {
             List<int> arr = new List<int>(nums);
@@ -1038,6 +1171,23 @@ namespace Sword2Offer {
                 max = Math.Max(max, nums[i]);
             }
             return max;
+        }
+    }
+
+    public class Probelm43 {
+        public int CountDigitOne(int n) {
+            int digit = 1, res = 0;
+            int high = n / 10, cur = n % 10, low = 0;
+            while (high != 0 || cur != 0) {
+                if (cur == 0) res += high * digit;
+                else if (cur == 1) res += high * digit + low + 1;
+                else res += (high + 1) * digit;
+                low += cur * digit;
+                cur = high % 10;
+                high /= 10;
+                digit *= 10;
+            }
+            return res;
         }
     }
 
@@ -1075,7 +1225,7 @@ namespace Sword2Offer {
                 if (result > 0) return 1;
                 return 0;
             }
-            
+
             List<int> arr = new List<int>(nums);
             arr.Sort(MyCompare);
             return string.Join("", arr);
@@ -1102,7 +1252,65 @@ namespace Sword2Offer {
             int m = grid.Length, n = grid[0].Length;
 
             for (int j = 1; j < n; j++) grid[0][j] += grid[0][j - 1];
-            for (int i = 1; i < m; i++) grid[i - 1]
+            for (int i = 1; i < m; i++) grid[i][0] += grid[i - 1][0];
+
+            for (int i = 1; i < m; i++)
+                for (int j = 1; j < n; j++)
+                    grid[i][j] += Math.Max(grid[i][j - 1], grid[i - 1][j]);
+
+            return grid[m - 1][n - 1];
+        }
+    }
+
+    public class Problem48 {
+        public int LengthOfLongestSubstring(string s) {
+            Dictionary<char, int> dict = new Dictionary<char, int>();
+            int res = 0, tmp = 0;
+
+            for (int j = 0; j < s.Length; j++) {
+                int i = dict.GetValueOrDefault(s[j], -1);
+                dict[s[j]] = j;
+
+                tmp = tmp < j - i ? tmp + 1 : j - i;
+                res = Math.Max(res, tmp);
+            }
+
+            return res;
+        }
+    }
+
+    public class Problem49 {
+        public int NthUglyNumber(int n) {
+            int[] dp = new int[n + 1];
+            int a = 1, b = 1, c = 1;
+            dp[1] = 1;
+
+            for (int i = 2; i <= n; i++) {
+                int n2, n3, n5;
+                (n2, n3, n5) = (dp[a] * 2, dp[b] * 3, dp[c] * 5);
+                dp[i] = Math.Min(Math.Min(n2, n3), n5);
+
+                if (dp[i] == n2) a++;
+                if (dp[i] == n3) b++;
+                if (dp[i] == n5) c++;
+            }
+
+            return dp[n];
+        }
+    }
+
+    public class Problem50 {
+        public char FirstUniqChar(string s) {
+            Dictionary<char, int> dict = new Dictionary<char, int>();
+
+            foreach (char c in s)
+                if (dict.ContainsKey(c)) dict[c] += 1;
+                else dict.Add(c, 1);
+
+            foreach (char c in s)
+                if (dict[c] == 1) return c;
+
+            return ' ';
         }
     }
 }

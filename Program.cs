@@ -5,14 +5,16 @@ using Sword2Offer;
 namespace LeetCode {
     class Program {
         static void Main(string[] args) {
-            var test = new Problem13();
+            var test = new Problem41();
 
-            int[] data1 = { 3, 4, 5, 1, 2 };
-
-            List<int> arr = new List<int>(data1);
-            arr.Sort((x, y) => -x.CompareTo(y));
-            Console.WriteLine(arr.ToArray()[0]);
-            Console.WriteLine();
+            Console.WriteLine(test.FindMedian());
+            test.AddNum(1);
+            test.AddNum(0);
+            Console.WriteLine(test.FindMedian());
+            test.AddNum(0);
+            Console.WriteLine(test.FindMedian());
+            test.AddNum(3);
+            Console.WriteLine(test.FindMedian());
         }
     }
 }
