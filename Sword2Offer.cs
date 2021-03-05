@@ -1313,4 +1313,143 @@ namespace Sword2Offer {
             return ' ';
         }
     }
+
+    public class Problem51 {
+        private int[] nums, tmp;
+
+        public int ReversePairs(int[] nums) {
+            this.nums = nums;
+            tmp = new int[nums.Length];
+            return MergeSort(0, nums.Length - 1);
+        }
+
+        private int MergeSort(int l, int r) {
+            if (l >= r) return 0;
+            int m = (l + r) / 2;
+            int res = MergeSort(l, m) + MergeSort(m + 1, r);
+            int i = l, j = m + 1;
+            for (int k = l; k <= r; k++)
+                tmp[k] = nums[k];
+            for (int k = l; k <= r; k++) {
+                if (i == m + 1)
+                    nums[k] = tmp[j++];
+                else if (j == r + 1 || tmp[i] <= tmp[j])
+                    nums[k] = tmp[i++];
+                else {
+                    nums[k] = tmp[j++];
+                    res += m - i + 1;
+                }
+            }
+            return res;
+        }
+    }
+
+    public class Problem52 {
+        public class ListNode {
+            public int val;
+            public ListNode next;
+            public ListNode(int x) { val = x; }
+        }
+
+        public ListNode GetIntersectionNode(ListNode headA, ListNode headB) {
+            ListNode A = headA, B = headB;
+            while(A != B) {
+                A = A != null ? A.next : headB;
+                B = B != null ? B.next : headA;
+            }
+
+            return A;
+        }
+    }
+
+    public class Problem53_1 {
+        public int Search(int[] nums, int target) {
+            Dictionary<int, int> dict = new Dictionary<int, int>();
+
+            foreach (int i in nums)
+                if (dict.ContainsKey(i)) dict[i]++;
+                else dict.Add(i, 1);
+
+            if (dict.ContainsKey(target))
+                return dict[target];
+            else
+                return 0;
+        }
+    }
+
+    public class Problem53_2 {
+        public int MissingNumber(int[] nums) {
+            int left = 0, right = nums.Length - 1;
+
+            while (left <= right) {
+                int mid = (left + right) / 2;
+                if (nums[mid] == mid) left = mid + 1;
+                else right = mid - 1;
+            }
+
+            return left;
+        }
+    }
+
+    public class Problem54 {
+        public class TreeNode {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int x) { val = x; }
+        }
+
+        private int result;
+        private int count;
+
+        public int KthLargest(TreeNode root, int k) {
+            count = k;
+            Search(root);
+            return result;
+        }
+
+        private void Search(TreeNode root) {
+            if (root == null || count == 0) return;
+
+            Search(root.right);
+            if (--count == 0) {
+                result = root.val;
+                return;
+            }
+            Search(root.left);
+        }
+    }
+
+    public class Problem55_1 {
+        public class TreeNode {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int x) { val = x; }
+        }
+
+        public int MaxDepth(TreeNode root) {
+            if (root == null) return 0;
+            return Math.Max(MaxDepth(root.left), MaxDepth(root.right)) + 1;
+        }
+    }
+
+    public class Problem55_2 {
+        public class TreeNode {
+            public int val;
+            public TreeNode left;
+            public TreeNode right;
+            public TreeNode(int x) { val = x; }
+        }
+
+        public bool IsBalanced(TreeNode root) {
+            if (root == null) return true;
+            return Math.Abs(Depth(root.left) - Depth(root.right)) <= 1 && IsBalanced(root.left) && IsBalanced(root.right);
+        }
+
+        private int Depth(TreeNode root) {
+            if (root == null) return 0;
+            return Math.Max(Depth(root.left), Depth(root.right)) + 1;
+        }
+    }
 }
