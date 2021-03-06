@@ -1353,7 +1353,7 @@ namespace Sword2Offer {
 
         public ListNode GetIntersectionNode(ListNode headA, ListNode headB) {
             ListNode A = headA, B = headB;
-            while(A != B) {
+            while (A != B) {
                 A = A != null ? A.next : headB;
                 B = B != null ? B.next : headA;
             }
@@ -1450,6 +1450,165 @@ namespace Sword2Offer {
         private int Depth(TreeNode root) {
             if (root == null) return 0;
             return Math.Max(Depth(root.left), Depth(root.right)) + 1;
+        }
+    }
+
+    public class Problem56_1 {
+        public int[] SingleNumbers(int[] nums) {
+            int x = 0, y = 0, n = 0, m = 1;
+
+            foreach (int num in nums) n ^= num;
+            while ((n & m) == 0) m <<= 1;
+            foreach (int num in nums) {
+                if ((num & m) != 0) x ^= num;
+                else y ^= num;
+            }
+
+            return new int[] { x, y };
+        }
+    }
+
+    public class Problem56_2 {
+        public int SingleNumber(int[] nums) {
+            Dictionary<int, int> dict = new Dictionary<int, int>();
+
+            foreach (int i in nums)
+                if (dict.ContainsKey(i)) dict[i]++;
+                else dict.Add(i, 1);
+
+            foreach (int key in dict.Keys)
+                if (dict[key] == 1) return key;
+
+            return 0;
+        }
+    }
+
+    public class Problem57_1 {
+        public int[] TwoSum(int[] nums, int target) {
+            int i = 0;
+            int j = nums.Length - 1;
+
+            while (i < j) {
+                int sum = nums[i] + nums[j];
+                if (sum < target) i++;
+                else if (sum > target) j--;
+                else return new int[] { nums[i], nums[j] };
+            }
+
+            return new int[0];
+        }
+    }
+
+    public class Problem57_2 {
+        public int[][] FindContinuousSequence(int target) {
+            int i = 1, j = 2, sum = 3;
+            List<int[]> result = new List<int[]>();
+
+            while (i < j) {
+                if (sum == target) {
+                    List<int> tempList = new List<int>();
+                    for (int k = i; k <= j; k++) tempList.Add(k);
+                    result.Add(tempList.ToArray());
+                }
+
+                if (sum >= target) {
+                    sum -= i;
+                    i++;
+                }
+                else {
+                    j++;
+                    sum += j;
+                }
+            }
+
+            return result.ToArray();
+        }
+    }
+
+    public class Problem58_1 {
+        public string ReverseWords(string s) {
+            string[] strList = s.Trim().Split(" ");
+            StringBuilder result = new StringBuilder();
+
+            for (int i = strList.Length - 1; i >= 0; i--) {
+                if (strList[i] == "") continue;
+                result.Append(strList[i] + " ");
+            }
+
+            return result.ToString().Trim();
+        }
+    }
+
+    public class Problem58_2 {
+        public string ReverseLeftWords(string s, int n) {
+            string firstStr = s.Substring(0, n);
+            string lastStr = s.Substring(n);
+
+            return lastStr + firstStr;
+        }
+    }
+
+    public class Problem59_1 {
+        public int[] MaxSlidingWindow(int[] nums, int k) {
+            if (nums.Length == 0 || k == 0) return new int[0];
+
+            LinkedList<int> deque = new LinkedList<int>();
+            int[] result = new int[nums.Length - k + 1];
+            for (int j = 0, i = 1 - k; j < nums.Length; i++, j++) {
+                if (i > 0 && deque.First.Value == nums[i - 1])
+                    deque.RemoveFirst();
+                while (deque.Count != 0 && deque.Last.Value < nums[j])
+                    deque.RemoveLast();
+                deque.AddLast(nums[j]);
+                if (i >= 0) result[i] = deque.First.Value;
+            }
+
+            return result;
+        }
+    }
+
+    public class Problem59_2 {
+        public class MaxQueue {
+            Queue<int> queue = new Queue<int>();
+            LinkedList<int> deque = new LinkedList<int>();
+
+            public MaxQueue() { }
+
+            public int Max_value() {
+                return deque.Count == 0 ? -1 : deque.First.Value;
+            }
+
+            public void Push_back(int value) {
+                queue.Enqueue(value);
+                while (deque.Count != 0 && deque.Last.Value < value)
+                    deque.RemoveLast();
+                deque.AddLast(value);
+            }
+
+            public int Pop_front() {
+                if (queue.Count == 0) return -1;
+                if (queue.Peek() == deque.First.Value)
+                    deque.RemoveFirst();
+                return queue.Dequeue();
+            }
+        }
+    }
+
+    public class Problem60 {
+        public double[] DicesProbability(int n) {
+            double a = 1.0 / 6.0;
+            double[] dp = { a, a, a, a, a, a };
+
+            for (int i = 2; i <= n; i++) {
+                double[] tmp = new double[5 * i + 1];
+                for (int j = 0; j < dp.Length; j++) {
+                    for (int k = 0; k < 6; k++) {
+                        tmp[j + k] += dp[j] / 6.0;
+                    }
+                }
+                dp = tmp;
+            }
+            return dp;
         }
     }
 }
