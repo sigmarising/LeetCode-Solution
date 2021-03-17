@@ -1,5 +1,5 @@
 ﻿# LeetCode-Solution
 
-My LeetCode solution written with C#.
+My LeetCode solution written with C# and Java.
 
-The solution is in different class of the same file.
+The solution of different series is in the different folders.
