@@ -341,6 +341,9 @@ healthchecksdb
 
 # ---------------------------------------------------
 # For Java .gitignore
+# IDEA's rubbish file
+LeetCode-Solution.iml
+
 # Compiled class file
 *.class
 out/
