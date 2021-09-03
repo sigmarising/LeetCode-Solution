@@ -3,7 +3,7 @@
 My LeetCode solution written with C# and Java.
 
 The solution of different series is in the different folders:
-* `Official/`: The official problem database's Java solutions (mainly for Daily Challenge).
+* `DailyChallenge/`: The official problem database's Java solutions (mainly for Daily Challenge).
   * Indexed by official id
 * `Sword2Offer/`: The series of Sword2Offer by C# solutions.
   * Indexed by Sword2Offer id

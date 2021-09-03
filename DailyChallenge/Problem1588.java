@@ -1,4 +1,4 @@
-package Official;
+package DailyChallenge;
 
 public class Problem1588 {
     public int sumOddLengthSubarrays(int[] arr) {

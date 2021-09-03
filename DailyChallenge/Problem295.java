@@ -1,4 +1,4 @@
-package Official;
+package DailyChallenge;
 
 import java.util.PriorityQueue;
 

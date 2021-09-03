@@ -1,4 +1,4 @@
-package Official;
+package DailyChallenge;
 
 public class Problem1480 {
     public int[] runningSum(int[] nums) {
